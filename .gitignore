@@ -25,3 +25,5 @@ _testmain.go
 
 dist
 udp-sniffer
+
+.DS_Store
