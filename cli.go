@@ -6,8 +6,8 @@ import (
 )
 
 func main() {
-	log.Println("Started...")
 	parseArgs()
+	log.Println("Started...")
 
 	receiveAddress := receiveIP + ":" + strconv.Itoa(receivePort)
 	localAddress := localIP + ":" + strconv.Itoa(localPort)
