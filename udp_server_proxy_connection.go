@@ -30,8 +30,10 @@ func udpServerProxyConnection(receiveAddressString, prefix string, in <-chan []b
 			}
 
 			mutex.Lock()
-			lastClientAddress = address
-			log.Println("last client address: ", lastClientAddress)
+			if lastClientAddress != address {
+				lastClientAddress = address
+				log.Println("last client address: ", lastClientAddress)
+			}
 			mutex.Unlock()
 
 			if n > 0 {
