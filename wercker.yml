@@ -1,5 +1,4 @@
 box: golang
-#box: tcnksm/wercker-box-gox
 dev:
   steps:
     - internal/watch:
@@ -14,20 +13,6 @@ build:
         name: go get
         code: |
           go get -t ./...
-    - script:
-        name: install mitchellh/gox
-        code: |
-          go get -u -v github.com/mitchellh/gox
-#    - script:
-#        name: install tcnksm/ghr
-#        code: |
-#          go get -u -v github.com/tcnksm/ghr
-    - script:
-      name: install zip
-      code: |
-        sudo apt-get update -y
-        sudo apt-get upgrade -y
-        sudo apt-get install -y zip
     - wercker/golint
     - script:
         name: go build
@@ -48,14 +33,15 @@ build:
           for TARGET in $(find $WERCKER_OUTPUT_DIR/pkg/ -mindepth 1 -maxdepth 1 -type d); do
               cp README.* LICENSE ${TARGET}
           done
+    - script:
+      name: install zip
+      code: |
+        sudo apt-get update -y
+        sudo apt-get upgrade -y
+        sudo apt-get install -y zip
     - tcnksm/zip:
         input: $WERCKER_OUTPUT_DIR/pkg
         output: $WERCKER_OUTPUT_DIR/dist
-#    - script:
-#        name: upload to github
-#        code: |
-#          ls $WERCKER_OUTPUT_DIR/dist/
-#          ghr --token $GITHUB_TOKEN --username $WERCKER_GIT_OWNER --repository $WERCKER_GIT_REPOSITORY --replace --delete --prerelease pre-release $WERCKER_OUTPUT_DIR/dist/*.zip
     - tcnksm/ghr:
         token: $GITHUB_TOKEN
         input: $WERCKER_OUTPUT_DIR/dist
