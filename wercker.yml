@@ -18,7 +18,6 @@ build:
         name: install mitchellh/gox
         code: |
           go get -u -v github.com/mitchellh/gox
-          sudo -E env PATH=$GOPATH/bin:$PATH gox -build-toolchain
     - wercker/golint
     - script:
         name: go build
