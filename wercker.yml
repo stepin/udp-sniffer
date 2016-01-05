@@ -48,6 +48,7 @@ build:
     - script:
         name: upload to github
         code: |
+          ls $WERCKER_OUTPUT_DIR/dist/
           ghr --token $GITHUB_TOKEN --username $WERCKER_GIT_OWNER --repository $WERCKER_GIT_REPOSITORY --replace --delete --prerelease pre-release $WERCKER_OUTPUT_DIR/dist/*.zip
 #    - tcnksm/ghr:
 #        token: $GITHUB_TOKEN
