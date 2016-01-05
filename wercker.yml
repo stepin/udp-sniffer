@@ -27,14 +27,10 @@ build:
         name: go test
         code: |
           go test ./...
-    - script:
-        name: export build date
-        code: |
-          export BUILD_DATE=`date -u '+%Y-%m-%d_%I:%M:%S%p'`
     - tcnksm/gox:
         os: "darwin linux windows"
         arch: "386 amd64"
-        ldflags: -X main.buildDate=$BUILD_DATE -X main.gitCommit=$WERCKER_GIT_COMMIT
+        ldflags: -X main.buildDate=`date -u '+%Y-%m-%d_%I:%M:%S%p'` -X main.gitCommit=$WERCKER_GIT_COMMIT
         output: $WERCKER_GIT_REPOSITORY-{{.OS}}_{{.Arch}}/{{.Dir}}
     - script:
         name: copy text files to distr
