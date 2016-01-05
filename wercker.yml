@@ -18,6 +18,10 @@ build:
         name: install mitchellh/gox
         code: |
           go get -u -v github.com/mitchellh/gox
+    - script:
+        name: install tcnksm/ghr
+        code: |
+          go get -u -v github.com/tcnksm/ghr
     - wercker/golint
     - script:
         name: go build
@@ -41,6 +45,10 @@ build:
     - tcnksm/zip:
         input: $WERCKER_OUTPUT_DIR/pkg
         output: $WERCKER_OUTPUT_DIR/dist
+    - script:
+        name: upload to github
+        code: |
+          ghr --token $GITHUB_TOKEN --username $WERCKER_GIT_OWNER --repository $WERCKER_GIT_REPOSITORY --replace --delete --prerelease pre-release $WERCKER_OUTPUT_DIR/dist
 #    - tcnksm/ghr:
 #        token: $GITHUB_TOKEN
 #        input: $WERCKER_OUTPUT_DIR/dist
