@@ -9,7 +9,7 @@ dev:
         reload: false
 build:
   steps:
-    #- setup-go-workspace
+    - setup-go-workspace
     - script:
         name: go get
         code: |
