@@ -1,5 +1,5 @@
-# UDP COM (serial) port Sniffer/Proxy [![GitHub release](https://img.shields.io/github/release/stepin/udp-sniffer.svg)](https://github.com/stepin/udp-sniffer/releases) [![license](http://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/stepin/udp-sniffer/master/LICENSE) [![GoDoc](https://godoc.org/github.com/stepin/udp-sniffer?status.svg)](https://godoc.org/github.com/stepin/udp-sniffer) [![wercker status](https://app.wercker.com/status/52211c1af988eb5c9608e6c65d918642/s/master "wercker status")](https://app.wercker.com/project/bykey/52211c1af988eb5c9608e6c65d918642) [![Go Report Card](http://goreportcard.com/badge/stepin/udp-sniffer)](http://goreportcard.com/report/stepin/udp-sniffer)
-
+# UDP COM (serial) port Sniffer/Proxy
+ [![GitHub release](https://img.shields.io/github/release/stepin/udp-sniffer.svg)](https://github.com/stepin/udp-sniffer/releases) [![license](http://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/stepin/udp-sniffer/master/LICENSE) [![GoDoc](https://godoc.org/github.com/stepin/udp-sniffer?status.svg)](https://godoc.org/github.com/stepin/udp-sniffer) [![wercker status](https://app.wercker.com/status/52211c1af988eb5c9608e6c65d918642/s/master "wercker status")](https://app.wercker.com/project/bykey/52211c1af988eb5c9608e6c65d918642) [![Go Report Card](http://goreportcard.com/badge/stepin/udp-sniffer)](http://goreportcard.com/report/stepin/udp-sniffer)
 
 UDP COM port Sniffer/Proxy is used for debugging communication between apps and devices.
 
@@ -43,6 +43,6 @@ To compile you need the [Golang](https://golang.org) (v1.5.1). Run `go build` co
 This project is feature complete. No future development is expected.
 
 ## Similar apps for COM ports
-- [RealTerm](http://realterm.sourceforge.net) -- a good app though it does not support UDP.
-- [Null-modem emulator (com0com)](http://com0com.sourceforge.net) -- it allows debugging apps with device emulators.
-- [Hercules](http://www.hw-group.com/products/hercules/index_en.html) -- it has a limited UDP support: received data is in the ASCII format only.
+- [RealTerm](http://realterm.sourceforge.net) - a good app though it does not support UDP.
+- [Null-modem emulator (com0com)](http://com0com.sourceforge.net) - it allows debugging apps with device emulators.
+- [Hercules](http://www.hw-group.com/products/hercules/index_en.html) - it has a limited UDP support: received data is in the ASCII format only.
