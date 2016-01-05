@@ -44,4 +44,4 @@ popd
 #fpm -s dir -t rpm --name $PACKAGE_NAME --version $PACKAGE_VERSION --package dist/ --license MIT --rpm-os linux --prefix /opt/$PACKAGE_NAME-$PACKAGE_VERSION --url https://github.com/stepin/udp-sniffer pkg/$PACKAGE_NAME-linux_amd64/
 
 echo Upload release to github
-#ghr --token $GITHUB_TOKEN --username $WERCKER_GIT_OWNER --repository $WERCKER_GIT_REPOSITORY --replace `git describe --tags` dist/
+ghr --token $GITHUB_TOKEN --username $WERCKER_GIT_OWNER --repository $WERCKER_GIT_REPOSITORY --replace `git describe --tags` dist/
