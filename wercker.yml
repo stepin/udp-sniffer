@@ -22,6 +22,10 @@ build:
         name: go test
         code: |
           go test ./...
+    - script:
+        name: install mitchellh/gox
+        code: |
+          go get -u -v github.com/mitchellh/gox
     - tcnksm/gox:
         os: "darwin linux windows"
         arch: "386 amd64"
