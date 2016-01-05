@@ -3,9 +3,9 @@ package main
 import "fmt"
 
 var (
-	version   = "Prerelease"
-	buildDate = "Unknown"
-	gitCommit = "Unknown"
+	version   = "pre-release"
+	buildDate = "unknown"
+	gitCommit = "unknown"
 )
 
 func printVersion() {
