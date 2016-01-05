@@ -23,7 +23,10 @@ _testmain.go
 *.test
 *.prof
 
+pkg
 dist
+_*
+source
 udp-sniffer
 
 .DS_Store

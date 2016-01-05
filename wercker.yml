@@ -1,0 +1,55 @@
+box: golang
+#box: tcnksm/wercker-box-gox
+dev:
+  steps:
+    - internal/watch:
+        code: |
+          go build ./...
+          ./source
+        reload: false
+build:
+  steps:
+    #- setup-go-workspace
+    - script:
+        name: go get
+        code: |
+          go get -t ./...
+    - script:
+        name: install mitchellh/gox
+        code: |
+          go get -u -v github.com/mitchellh/gox
+          sudo -E env PATH=$GOPATH/bin:$PATH gox -build-toolchain
+    - wercker/golint
+    - script:
+        name: go build
+        code: |
+          go build ./...
+    - script:
+        name: go test
+        code: |
+          go test ./...
+    - script:
+        name: export build date
+        code: |
+          export BUILD_DATE=`date -u '+%Y-%m-%d_%I:%M:%S%p'`
+    - tcnksm/gox:
+        os: "darwin linux windows"
+        arch: "386 amd64"
+        ldflags: -X main.buildDate=$BUILD_DATE -X main.gitCommit=$WERCKER_GIT_COMMIT
+        output: $WERCKER_GIT_REPOSITORY-{{.OS}}_{{.Arch}}/{{.Dir}}
+    - script:
+        name: copy text files to distr
+        code: |
+          for TARGET in $(find $WERCKER_OUTPUT_DIR/pkg/ -mindepth 1 -maxdepth 1 -type d); do
+              cp README.* LICENSE ${TARGET}
+          done
+    - tcnksm/zip:
+        input: $WERCKER_OUTPUT_DIR/pkg
+        output: $WERCKER_OUTPUT_DIR/dist
+deploy:
+  steps:
+      - tcnksm/ghr:
+        token: $GITHUB_TOKEN
+        input: $WERCKER_OUTPUT_DIR/dist
+        pre_release: true
+        replace: true
