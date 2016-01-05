@@ -45,9 +45,7 @@ build:
     - tcnksm/zip:
         input: $WERCKER_OUTPUT_DIR/pkg
         output: $WERCKER_OUTPUT_DIR/dist
-deploy:
-  steps:
-      - tcnksm/ghr:
+    - tcnksm/ghr:
         token: $GITHUB_TOKEN
         input: $WERCKER_OUTPUT_DIR/dist
         pre_release: true
