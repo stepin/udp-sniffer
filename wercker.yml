@@ -1,4 +1,4 @@
-box: golang
+box: stepin2/golang-build-docker
 dev:
   steps:
     - internal/watch:
