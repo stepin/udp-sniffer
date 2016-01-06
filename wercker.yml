@@ -49,15 +49,15 @@ build:
           touch $WERCKER_OUTPUT_DIR/dist/empty_file
 deploy:
   steps:
-    - stepin/ghr:
-        token: $GITHUB_TOKEN
-        input: $WERCKER_OUTPUT_DIR/dist
-        version: pre-release
-        pre_release: true
-        replace: true
     - script:
         name: debug
         code: |
           ls $WERCKER_REPORT_ARTIFACTS_DIR
           echo export
           export
+    - stepin/ghr:
+        token: $GITHUB_TOKEN
+        input: $WERCKER_OUTPUT_DIR/dist
+        version: pre-release
+        pre_release: true
+        replace: true
