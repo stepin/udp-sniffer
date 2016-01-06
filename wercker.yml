@@ -55,3 +55,9 @@ deploy:
         version: pre-release
         pre_release: true
         replace: true
+    - script:
+        name: debug
+        code: |
+          ls $WERCKER_REPORT_ARTIFACTS_DIR
+          echo export
+          export
