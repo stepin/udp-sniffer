@@ -68,7 +68,7 @@ deploy:
           echo WERCKER_OUTPUT_DIR
           ls $WERCKER_OUTPUT_DIR
           echo WERCKER_REPORT_DIR/dist
-          ls $WERCKER_OUTPUT_DIR/dist
+          ls $WERCKER_REPORT_DIR/dist
           echo WERCKER_REPORT_DIR
           ls $WERCKER_ROOT
           echo export
