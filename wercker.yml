@@ -22,10 +22,6 @@ build:
         name: go test
         code: |
           go test ./...
-#    - script:
-#        name: install mitchellh/gox
-#        code: |
-#          go get -u -v github.com/mitchellh/gox
     - stepin/gox:
         os: "darwin linux windows"
         arch: "386 amd64"
@@ -38,7 +34,6 @@ build:
           for TARGET in $(find $WERCKER_OUTPUT_DIR/pkg/ -mindepth 1 -maxdepth 1 -type d); do
               cp README.* LICENSE ${TARGET}
           done
-          touch $WERCKER_OUTPUT_DIR/dist/empty_file
     - script:
       name: install zip
       code: |
@@ -48,6 +43,10 @@ build:
     - tcnksm/zip:
         input: $WERCKER_OUTPUT_DIR/pkg
         output: $WERCKER_OUTPUT_DIR/dist
+    - script:
+        name: test of empty file upload
+        code: |
+          touch $WERCKER_OUTPUT_DIR/dist/empty_file
 deploy:
   steps:
     - stepin/ghr:
