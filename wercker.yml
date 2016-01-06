@@ -67,15 +67,15 @@ deploy:
           ls $WERCKER_REPORT_ARTIFACTS_DIR
           echo WERCKER_OUTPUT_DIR
           ls $WERCKER_OUTPUT_DIR
-          echo WERCKER_REPORT_DIR/dist
-          ls $WERCKER_REPORT_DIR/dist
-          echo WERCKER_REPORT_DIR
+          echo WERCKER_ROOT
           ls $WERCKER_ROOT
+          echo WERCKER_ROOT/dist
+          ls $WERCKER_ROOT/dist
           echo export
           export
     - stepin/ghr:
         token: $GITHUB_TOKEN
-        input: $WERCKER_REPORT_DIR/dist
+        input: dist
         version: pre-release
         pre_release: true
         replace: true
