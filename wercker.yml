@@ -54,8 +54,6 @@ build:
           ls $WERCKER_REPORT_ARTIFACTS_DIR
           echo WERCKER_OUTPUT_DIR
           ls $WERCKER_OUTPUT_DIR
-          echo WERCKER_REPORT_DIR
-          ls $WERCKER_REPORT_DIR
           echo WERCKER_ROOT
           ls $WERCKER_ROOT
           echo export
