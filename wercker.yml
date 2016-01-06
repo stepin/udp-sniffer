@@ -22,13 +22,14 @@ build:
         name: go test
         code: |
           go test ./...
-    - script:
-        name: install mitchellh/gox
-        code: |
-          go get -u -v github.com/mitchellh/gox
-    - tcnksm/gox:
+#    - script:
+#        name: install mitchellh/gox
+#        code: |
+#          go get -u -v github.com/mitchellh/gox
+    - stepin/gox:
         os: "darwin linux windows"
         arch: "386 amd64"
+        osarch: "!darwin/386"
         ldflags: -X main.buildDate=`date -u '+%Y-%m-%d_%I:%M:%S%p'` -X main.gitCommit=$WERCKER_GIT_COMMIT
         output: $WERCKER_GIT_REPOSITORY-{{.OS}}_{{.Arch}}/{{.Dir}}
     - script:
@@ -37,6 +38,7 @@ build:
           for TARGET in $(find $WERCKER_OUTPUT_DIR/pkg/ -mindepth 1 -maxdepth 1 -type d); do
               cp README.* LICENSE ${TARGET}
           done
+          touch $WERCKER_OUTPUT_DIR/dist/empty_file
     - script:
       name: install zip
       code: |
@@ -46,7 +48,9 @@ build:
     - tcnksm/zip:
         input: $WERCKER_OUTPUT_DIR/pkg
         output: $WERCKER_OUTPUT_DIR/dist
-    - tcnksm/ghr:
+deploy:
+  steps:
+    - stepin/ghr:
         token: $GITHUB_TOKEN
         input: $WERCKER_OUTPUT_DIR/dist
         version: pre-release
