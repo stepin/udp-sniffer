@@ -37,6 +37,10 @@ build:
     - stepin/zip:
         input: $WERCKER_OUTPUT_DIR/pkg
         output: $WERCKER_OUTPUT_DIR/dist
+    - script:
+        name: create rpm
+        code: |
+          fpm -s dir -t rpm --name udp-sniffer --version 1.0 --package dist/ --license MIT --rpm-os linux --prefix /opt/udp-sniffer-1 --url https://github.com/stepin/udp-sniffer $WERCKER_OUTPUT_DIR/udp-sniffer-linux_amd64/       
 deploy:
   steps:
     - stepin/ghr:
