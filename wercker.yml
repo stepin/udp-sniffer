@@ -47,12 +47,32 @@ build:
         name: test of empty file upload
         code: |
           touch $WERCKER_OUTPUT_DIR/dist/empty_file
+    - script:
+        name: debug
+        code: |
+          echo WERCKER_REPORT_ARTIFACTS_DIR
+          ls $WERCKER_REPORT_ARTIFACTS_DIR
+          echo WERCKER_OUTPUT_DIR
+          ls $WERCKER_OUTPUT_DIR
+          echo WERCKER_REPORT_DIR
+          ls $WERCKER_REPORT_DIR
+          echo WERCKER_ROOT
+          ls $WERCKER_ROOT
+          echo export
+          export
 deploy:
   steps:
     - script:
         name: debug
         code: |
+          echo WERCKER_REPORT_ARTIFACTS_DIR
           ls $WERCKER_REPORT_ARTIFACTS_DIR
+          echo WERCKER_OUTPUT_DIR
+          ls $WERCKER_OUTPUT_DIR
+          echo WERCKER_REPORT_DIR
+          ls $WERCKER_REPORT_DIR
+          echo WERCKER_ROOT
+          ls $WERCKER_ROOT
           echo export
           export
     - stepin/ghr:
