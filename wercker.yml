@@ -34,45 +34,11 @@ build:
           for TARGET in $(find $WERCKER_OUTPUT_DIR/pkg/ -mindepth 1 -maxdepth 1 -type d); do
               cp README.* LICENSE ${TARGET}
           done
-    - script:
-      name: install zip
-      code: |
-        sudo apt-get update -y
-        sudo apt-get upgrade -y
-        sudo apt-get install -y zip
-    - tcnksm/zip:
+    - stepin/zip:
         input: $WERCKER_OUTPUT_DIR/pkg
         output: $WERCKER_OUTPUT_DIR/dist
-    - script:
-        name: test of empty file upload
-        code: |
-          touch $WERCKER_OUTPUT_DIR/dist/empty_file
-    - script:
-        name: debug
-        code: |
-          echo WERCKER_REPORT_ARTIFACTS_DIR
-          ls $WERCKER_REPORT_ARTIFACTS_DIR
-          echo WERCKER_OUTPUT_DIR
-          ls $WERCKER_OUTPUT_DIR
-          echo WERCKER_ROOT
-          ls $WERCKER_ROOT
-          echo export
-          export
 deploy:
   steps:
-    - script:
-        name: debug
-        code: |
-          echo WERCKER_REPORT_ARTIFACTS_DIR
-          ls $WERCKER_REPORT_ARTIFACTS_DIR
-          echo WERCKER_OUTPUT_DIR
-          ls $WERCKER_OUTPUT_DIR
-          echo WERCKER_ROOT
-          ls $WERCKER_ROOT
-          echo WERCKER_ROOT/dist
-          ls $WERCKER_ROOT/dist
-          echo export
-          export
     - stepin/ghr:
         token: $GITHUB_TOKEN
         input: dist
