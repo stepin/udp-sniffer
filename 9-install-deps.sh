@@ -13,6 +13,8 @@ go get -v -u github.com/fzipp/gocyclo
 go get -v -u github.com/mvdan/interfacer/cmd/interfacer
 go get -v -u golang.org/x/tools/cmd/goimports
 go get -v -u github.com/kisielk/errcheck
+go get -v -u github.com/alecthomas/gometalinter
+gometalinter --install
 
 #debuggers
 go get -v -u github.com/mailgun/godebug
