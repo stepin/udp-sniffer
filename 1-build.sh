@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+set -x
 cd "$(dirname "$0")"
 
 export BUILD_DATE=`date -u '+%Y-%m-%d_%I:%M:%S%p'`
