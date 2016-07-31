@@ -16,7 +16,7 @@ func udpClientProxyConnection(localAddressString string, remoteAddressString str
 
 	listenConn, err := net.ListenUDP("udp", localAddress)
 	checkError(err)
-	defer listenConn.Close()
+	defer func() { _ = listenConn.Close() }()
 
 	//read goroutine
 	go func() {

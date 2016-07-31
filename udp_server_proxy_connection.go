@@ -14,7 +14,7 @@ func udpServerProxyConnection(receiveAddressString, prefix string, in <-chan []b
 
 	listenConn, err := net.ListenUDP("udp", localAddress)
 	checkError(err)
-	defer listenConn.Close()
+	defer func() { _ = listenConn.Close() }()
 
 	var mutex = &sync.Mutex{}
 	var lastClientAddress *net.UDPAddr
