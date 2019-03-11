@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -eu -o pipefail
+cd "$(dirname "$0")"
+[[ "${TRACE:-}" ]] && set -x
+
+BUILD_DATE=$(date -u '+%Y-%m-%d_%I:%M:%S%p')
+GIT_COMMIT=${WERCKER_GIT_COMMIT:-$(git rev-parse HEAD)}
+PACKAGE_VERSION=local
+export BUILD_DATE GIT_COMMIT PACKAGE_VERSION
+
+export GO111MODULE=on
+go install -race -ldflags " -X main.version=$PACKAGE_VERSION -X main.buildDate=$BUILD_DATE -X main.gitCommit=$GIT_COMMIT"

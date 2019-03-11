@@ -1,20 +1,22 @@
+#!/usr/bin/env bash
+set -eu -o pipefail
+[[ "${TRACE:-}" ]] && set -x
+
 #dist tools
 go get -v -u github.com/mitchellh/gox
 go get -v -u github.com/tcnksm/ghr
 #gem install fpm
 
 #deps management
-brew install glide
 go get -v -u github.com/shurcooL/gostatus
 
 #checks
 go get -v -u github.com/golang/lint/golint
 go get -v -u github.com/fzipp/gocyclo
-go get -v -u github.com/mvdan/interfacer/cmd/interfacer
+go get -u mvdan.cc/interfacer
 go get -v -u golang.org/x/tools/cmd/goimports
 go get -v -u github.com/kisielk/errcheck
-go get -v -u github.com/alecthomas/gometalinter
-gometalinter --install
+go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 
 #debuggers
 go get -v -u github.com/mailgun/godebug
