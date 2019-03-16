@@ -15,6 +15,7 @@ test:
 	go test
 	golangci-lint run --enable-all
 	find . -name '*.go' | xargs grep -inHwE '(FIXME|TODO|HACK|XXX|BUG)' || true
+	go mod tidy
 
 ## build: Build dev version for current OS.
 build: deps
