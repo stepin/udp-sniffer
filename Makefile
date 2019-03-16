@@ -35,11 +35,12 @@ mac: deps
 
 ## clean: Clean folder.
 clean:
-	rm -rf ${PROJECTNAME} ${PROJECTNAME}.exe distr/ || true
+	rm -rf ${PROJECTNAME} ${PROJECTNAME}.exe dist/ || true
 
 ## deps: Load dependent Go packages.
 deps:
 	go mod download
+	go generate ./...
 
 ## setup: Download extra packages for development and build.
 setup:

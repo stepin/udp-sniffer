@@ -3,9 +3,12 @@ package main
 import "fmt"
 
 var (
+	// nolint
 	version = "pre-release"
-	date    = "unknown"
-	commit  = "unknown"
+	// nolint
+	date = "unknown"
+	// nolint
+	commit = "unknown"
 )
 
 func printVersion() {
