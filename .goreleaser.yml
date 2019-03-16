@@ -36,7 +36,10 @@ nfpm:
     "README.ru.md": "/usr/share/doc/udp-sniffer/README.ru.md"
 dockers:
   - image_templates:
-      - stepin/udp-sniffer
+      - "stepin/udp-sniffer:{{ .Tag }}"
+      - "stepin/udp-sniffer:v{{ .Major }}"
+      - "stepin/udp-sniffer:v{{ .Major }}.{{ .Minor }}"
+      - "stepin/udp-sniffer:latest"
 checksum:
   name_template: 'checksums.txt'
 snapshot:
