@@ -1,21 +1,28 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net"
 )
 
-func udpClientProxyConnection(localAddressString string, remoteAddressString string, prefix string, in <-chan []byte, out chan<- []byte) {
+func udpClientProxyConnection(localAddressString string, remoteAddressString string, prefix string, in <-chan []byte, out chan<- []byte) error {
 	log.Printf("udpClientProxyConnection: " + prefix + " listen on " + localAddressString + " and send to " + remoteAddressString)
 
 	localAddress, err := net.ResolveUDPAddr("udp", localAddressString)
-	checkError(err)
+	if err != nil {
+		return fmt.Errorf("could not resolve UPD addr for local address %v", err)
+	}
 
 	remoteAddress, err := net.ResolveUDPAddr("udp", remoteAddressString)
-	checkError(err)
+	if err != nil {
+		return fmt.Errorf("could not resolve UPD addr for remote address %v", err)
+	}
 
 	listenConn, err := net.ListenUDP("udp", localAddress)
-	checkError(err)
+	if err != nil {
+		return fmt.Errorf("could listen on UPD %v", err)
+	}
 	defer func() { _ = listenConn.Close() }()
 
 	//read goroutine
@@ -24,7 +31,7 @@ func udpClientProxyConnection(localAddressString string, remoteAddressString str
 		for {
 			n, _, err := listenConn.ReadFromUDP(buf[0:])
 			if err != nil {
-				log.Println("Error: UDP read error: ", err)
+				log.Println("Error: client: UDP read error: ", err)
 				continue
 			}
 			if n > 0 {
@@ -37,12 +44,16 @@ func udpClientProxyConnection(localAddressString string, remoteAddressString str
 	}()
 
 	//write local goroutine
-	for {
-		packet := <-in
-		_, err := listenConn.WriteToUDP(packet, remoteAddress)
-		if err != nil {
-			log.Println("Error: UDP write error: ", err)
-			continue
+	go func() {
+		for {
+			packet := <-in
+			_, err := listenConn.WriteToUDP(packet, remoteAddress)
+			if err != nil {
+				log.Println("Error: client: UDP write error: ", err)
+				continue
+			}
 		}
-	}
+	}()
+
+	return nil
 }

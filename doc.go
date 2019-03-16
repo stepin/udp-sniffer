@@ -42,7 +42,7 @@ Installation
 You can download binaries (https://github.com/stepin/udp-sniffer/releases)
 compatible with your operation system.
 
-To compile you need the Golang(https://golang.org) (v1.5.1). Run `go build`
+To compile you need the Golang(https://golang.org) (v1.12). Run `go build`
 command in the project folder.
 
 

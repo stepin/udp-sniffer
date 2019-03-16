@@ -1,5 +1,5 @@
 # UDP COM (serial) port Sniffer/Proxy
-[![GitHub release](https://img.shields.io/github/release/stepin/udp-sniffer.svg)](https://github.com/stepin/udp-sniffer/releases) [![license](http://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/stepin/udp-sniffer/master/LICENSE) [![GoDoc](https://godoc.org/github.com/stepin/udp-sniffer?status.svg)](https://godoc.org/github.com/stepin/udp-sniffer) [![wercker status](https://app.wercker.com/status/e3ba96ef5d1c189f81b7878aafd2564e/s/master "wercker status")](https://app.wercker.com/project/bykey/e3ba96ef5d1c189f81b7878aafd2564e) [![Go Report Card](https://goreportcard.com/badge/stepin/udp-sniffer)](https://goreportcard.com/report/stepin/udp-sniffer)
+[![GitHub release](https://img.shields.io/github/release/stepin/udp-sniffer.svg)](https://github.com/stepin/udp-sniffer/releases) [![license](http://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/stepin/udp-sniffer/master/LICENSE) [![GoDoc](https://godoc.org/github.com/stepin/udp-sniffer?status.svg)](https://godoc.org/github.com/stepin/udp-sniffer) [![Go Report Card](https://goreportcard.com/badge/stepin/udp-sniffer)](https://goreportcard.com/report/stepin/udp-sniffer)
 
 UDP COM-порт сниффер/прокси для отладки взаимодействия приложения и устройства, общающихся по UDP COM-порту.
 
@@ -38,7 +38,7 @@ UDP COM-порт сниффер/прокси для отладки взаимо�
 ## Установка
 Проще всего скачать [готовый дистрибьютив](https://github.com/stepin/udp-sniffer/releases) для своей операционной системы.
 
-Для сборки из исходников нужно установить [Golang](https://golang.org) (разрабатывалось на версии 1.5.1) и выполнить `go build` в папке проекта. В текущей папке появится исполняемый файл upd-sniffer (на Windows udp-sniffer.exe).
+Для сборки из исходников нужно установить [Golang](https://golang.org) (проверено на версии 1.12) и выполнить `go build` в папке проекта. В текущей папке появится исполняемый файл upd-sniffer (на Windows udp-sniffer.exe).
 
 ## Статус
 Проект закончен. Дальнейшей разработки не планируется.

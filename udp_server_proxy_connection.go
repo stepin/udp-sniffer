@@ -1,19 +1,24 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net"
 	"sync"
 )
 
-func udpServerProxyConnection(receiveAddressString, prefix string, in <-chan []byte, out chan<- []byte) {
+func udpServerProxyConnection(receiveAddressString, prefix string, in <-chan []byte, out chan<- []byte) error {
 	log.Printf("udpServerProxyConnection: " + prefix + " listen on " + receiveAddressString + " and send to unknown yet")
 
 	localAddress, err := net.ResolveUDPAddr("udp", receiveAddressString)
-	checkError(err)
+	if err != nil {
+		return fmt.Errorf("could not resolve UPD addr for receiver address %v", err)
+	}
 
 	listenConn, err := net.ListenUDP("udp", localAddress)
-	checkError(err)
+	if err != nil {
+		return fmt.Errorf("could listen on UPD %v, %v", localAddress, err)
+	}
 	defer func() { _ = listenConn.Close() }()
 
 	var mutex = &sync.Mutex{}
@@ -25,7 +30,7 @@ func udpServerProxyConnection(receiveAddressString, prefix string, in <-chan []b
 		for {
 			n, address, err := listenConn.ReadFromUDP(buf[0:])
 			if err != nil {
-				log.Println("Error: UDP read error: ", err)
+				log.Println("Error: server: UDP read error: ", err)
 				continue
 			}
 
@@ -46,21 +51,25 @@ func udpServerProxyConnection(receiveAddressString, prefix string, in <-chan []b
 	}()
 
 	//write local goroutine
-	for {
-		packet := <-in
+	go func() {
+		for {
+			packet := <-in
 
-		mutex.Lock()
-		address := lastClientAddress
-		mutex.Unlock()
+			mutex.Lock()
+			address := lastClientAddress
+			mutex.Unlock()
 
-		if address == nil {
-			log.Print("Error: unknown remote address, packet skipped")
-			continue
+			if address == nil {
+				log.Println("Error: server: unknown remote address, packet skipped")
+				continue
+			}
+			_, err := listenConn.WriteToUDP(packet, address)
+			if err != nil {
+				log.Println("Error: server: UDP write error: ", err)
+				continue
+			}
 		}
-		_, err := listenConn.WriteToUDP(packet, address)
-		if err != nil {
-			log.Println("Error: UDP write error: ", err)
-			continue
-		}
-	}
+	}()
+
+	return nil
 }
