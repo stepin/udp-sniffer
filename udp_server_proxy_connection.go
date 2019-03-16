@@ -19,7 +19,12 @@ func udpServerProxy(receiveAddrStr, prefix string, in <-chan []byte, out chan<- 
 	if err != nil {
 		return fmt.Errorf("could listen on UPD %v, %v", localAddr, err)
 	}
-	defer func() { _ = listenConn.Close() }()
+	defer func() {
+		err = listenConn.Close()
+		if err != nil {
+			log.Printf("Error: server: fail on close: %v\n", err)
+		}
+	}()
 
 	var mutex = &sync.Mutex{}
 	var lastClientAddr *net.UDPAddr
@@ -30,14 +35,14 @@ func udpServerProxy(receiveAddrStr, prefix string, in <-chan []byte, out chan<- 
 		for {
 			n, address, err := listenConn.ReadFromUDP(buf[0:])
 			if err != nil {
-				log.Println("Error: server: UDP read error: ", err)
+				log.Printf("Error: server: UDP read error: %v\n", err)
 				continue
 			}
 
 			mutex.Lock()
 			if lastClientAddr != address {
 				lastClientAddr = address
-				log.Println("last client address: ", lastClientAddr)
+				log.Printf("Last client address: %v\n", lastClientAddr)
 			}
 			mutex.Unlock()
 
@@ -60,12 +65,12 @@ func udpServerProxy(receiveAddrStr, prefix string, in <-chan []byte, out chan<- 
 			mutex.Unlock()
 
 			if address == nil {
-				log.Println("Error: server: unknown remote address, packet skipped")
+				log.Printf("Error: server: unknown remote address, packet skipped\n")
 				continue
 			}
 			_, err := listenConn.WriteToUDP(packet, address)
 			if err != nil {
-				log.Println("Error: server: UDP write error: ", err)
+				log.Printf("Error: server: UDP write error: %v\n", err)
 				continue
 			}
 		}

@@ -31,7 +31,7 @@ Here is an example of session:
     2016/01/05 03:08:03 Started...
     2016/01/05 03:08:03 udpServerProxy: >> listen on :11000 and send to unknown yet
     2016/01/05 03:08:03 udpClientProxy: << listen on :11010 and send to 192.168.1.34:11000
-    2016/01/05 03:08:05 last client address: 192.168.1.35:11000
+    2016/01/05 03:08:05 Last client address: 192.168.1.35:11000
     2016/01/05 03:08:05 >> 00 00 0E 12
     2016/01/05 03:08:05 << 00 00 11 00
     ^C2016/01/05 03:08:08 Stopped...

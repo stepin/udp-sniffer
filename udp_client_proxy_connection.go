@@ -23,7 +23,12 @@ func udpClientProxy(localAddrStr, remoteAddrStr, prefix string, in <-chan []byte
 	if err != nil {
 		return fmt.Errorf("could listen on UPD %v", err)
 	}
-	defer func() { _ = listenConn.Close() }()
+	defer func() {
+		err = listenConn.Close()
+		if err != nil {
+			log.Printf("Error: client: fail on close: %v\n", err)
+		}
+	}()
 
 	//read goroutine
 	go func() {
@@ -31,7 +36,7 @@ func udpClientProxy(localAddrStr, remoteAddrStr, prefix string, in <-chan []byte
 		for {
 			n, _, err := listenConn.ReadFromUDP(buf[0:])
 			if err != nil {
-				log.Println("Error: client: UDP read error: ", err)
+				log.Printf("Error: client: UDP read error: %v\n", err)
 				continue
 			}
 			if n > 0 {
@@ -49,7 +54,7 @@ func udpClientProxy(localAddrStr, remoteAddrStr, prefix string, in <-chan []byte
 			packet := <-in
 			_, err := listenConn.WriteToUDP(packet, remoteAddr)
 			if err != nil {
-				log.Println("Error: client: UDP write error: ", err)
+				log.Printf("Error: client: UDP write error: %v\n", err)
 				continue
 			}
 		}
