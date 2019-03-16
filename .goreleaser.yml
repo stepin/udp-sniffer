@@ -27,11 +27,16 @@ archive:
       format: zip
 nfpm:
   homepage: https://github.com/stepin/udp-sniffer
+  description: UDP COM port Sniffer/Proxy is used for debugging communication between apps and devices.
   formats:
     - deb
     - rpm
   bindir: /usr/bin
   license: MIT
+  files:
+    "LICENSE.txt": "/usr/share/doc/udp-sniffer/LICENSE.txt"
+    "README.md": "/usr/share/doc/udp-sniffer/README.md"
+    "README.ru.md": "/usr/share/doc/udp-sniffer/README.ru.md"
 dockers:
   - image_templates:
       - stepin/udp-sniffer
