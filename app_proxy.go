@@ -7,13 +7,9 @@ import (
 	"sync"
 )
 
-func udpServerProxy(receiveAddrStr, prefix string, in <-chan []byte, out chan<- []byte) error {
-	log.Printf("udpServerProxy: " + prefix + " listen on " + receiveAddrStr + " and send to unknown yet")
-
-	localAddr, err := net.ResolveUDPAddr("udp", receiveAddrStr)
-	if err != nil {
-		return fmt.Errorf("could not resolve UPD addr for receiver address %v", err)
-	}
+func appProxy(localAddr *net.UDPAddr, prefix string, in <-chan []byte, out chan<- []byte) error {
+	log.Printf("appProxy: %s listen on %v and send to unknown yet", prefix, localAddr)
+	log.Printf("appProxy: app's IP and port will be autodetected from the first data packet")
 
 	listenConn, err := net.ListenUDP("udp", localAddr)
 	if err != nil {
@@ -22,27 +18,27 @@ func udpServerProxy(receiveAddrStr, prefix string, in <-chan []byte, out chan<- 
 	defer func() {
 		err = listenConn.Close()
 		if err != nil {
-			log.Printf("Error: server: fail on close: %v\n", err)
+			log.Printf("Error: appProxy: fail on close: %v", err)
 		}
 	}()
 
 	var mutex = &sync.Mutex{}
 	var lastClientAddr *net.UDPAddr
 
-	//read goroutine
+	//receive
 	go func() {
 		buf := make([]byte, 1024)
 		for {
 			n, address, err := listenConn.ReadFromUDP(buf[0:])
 			if err != nil {
-				log.Printf("Error: server: UDP read error: %v\n", err)
+				log.Printf("Error: appProxy: UDP read error: %v", err)
 				continue
 			}
 
 			mutex.Lock()
 			if lastClientAddr != address {
 				lastClientAddr = address
-				log.Printf("Last client address: %v\n", lastClientAddr)
+				log.Printf("Last app address: %v", lastClientAddr)
 			}
 			mutex.Unlock()
 
@@ -55,7 +51,7 @@ func udpServerProxy(receiveAddrStr, prefix string, in <-chan []byte, out chan<- 
 		}
 	}()
 
-	//write local goroutine
+	//send
 	go func() {
 		for {
 			packet := <-in
@@ -65,12 +61,12 @@ func udpServerProxy(receiveAddrStr, prefix string, in <-chan []byte, out chan<- 
 			mutex.Unlock()
 
 			if address == nil {
-				log.Printf("Error: server: unknown remote address, packet skipped\n")
+				log.Printf("Error: appProxy: unknown remote address, packet skipped")
 				continue
 			}
 			_, err := listenConn.WriteToUDP(packet, address)
 			if err != nil {
-				log.Printf("Error: server: UDP write error: %v\n", err)
+				log.Printf("Error: appProxy: UDP write error: %v", err)
 				continue
 			}
 		}

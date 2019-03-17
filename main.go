@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"log"
+	"net"
 	"os"
 	"os/signal"
 	"strconv"
@@ -10,14 +11,14 @@ import (
 )
 
 func main() {
-	receivePort := flag.Int("receivePort", 11000, "Local UPD port to listen connection")
-	receiveIP := flag.String("receiveIP", "", "Local IP port to listen connection")
+	proxyAppPort := flag.Int("proxyAppPort", 11000, "UPD port for this tool to communicate with app")
+	proxyAppIP := flag.String("proxyAppIP", "", "IP for this tool to communicate with device app")
 
-	localPort := flag.Int("localPort", 11010, "Local UPD port to send data from")
-	localIP := flag.String("localIP", "", "Local IP port to send data from")
+	proxyDevicePort := flag.Int("proxyDevicePort", 11010, "UPD port for this tool to communicate with device")
+	proxyDeviceIP := flag.String("proxyDeviceIP", "", "IP for this tool to communicate with device")
 
-	remotePort := flag.Int("remotePort", 11000, "Remote UPD port to send data")
-	remoteIP := flag.String("remoteIP", "127.0.0.1", "Remote IP port to send data")
+	devicePort := flag.Int("devicePort", 11000, "UPD port of device")
+	deviceIP := flag.String("deviceIP", "127.0.0.1", "IP of device")
 
 	versionFlag := flag.Bool("v", false, "Show app version")
 	flag.Parse()
@@ -27,27 +28,37 @@ func main() {
 		os.Exit(0)
 	}
 
-	receiveAddr := *receiveIP + ":" + strconv.Itoa(*receivePort)
-	localAddr := *localIP + ":" + strconv.Itoa(*localPort)
-	remoteAddr := *remoteIP + ":" + strconv.Itoa(*remotePort)
+	proxyAppAddr := resolveUDPAddr(*proxyAppIP, *proxyAppPort)
+	proxyDeviceAddr := resolveUDPAddr(*proxyDeviceIP, *proxyDevicePort)
+	deviceAddr := resolveUDPAddr(*deviceIP, *devicePort)
 
 	log.Println("Started...")
-	server(receiveAddr, localAddr, remoteAddr)
+	startProxies(proxyAppAddr, proxyDeviceAddr, deviceAddr)
 	waitTerm()
 	log.Println("Stopped...")
 }
 
-//Starts required UDP servers and clients.
-func server(receiveAddr, localAddr, remoteAddr string) {
-	toClient := make(chan []byte, 100)
-	fromClient := make(chan []byte, 100)
+func resolveUDPAddr(ip string, port int) *net.UDPAddr {
+	s := ip + ":" + strconv.Itoa(port)
+	addr, err := net.ResolveUDPAddr("udp", s)
+	if err != nil {
+		log.Fatalf("Error: could not resolve UPD addr %v, error: %v\n", s, err)
+	}
+	return addr
+}
 
-	err := udpServerProxy(receiveAddr, ">>", fromClient, toClient)
+//Starts required UDP servers and clients.
+func startProxies(proxyAppAddr, proxyDeviceAddr, deviceAddr *net.UDPAddr) {
+	toDevice := make(chan []byte, 100)
+	fromDevice := make(chan []byte, 100)
+
+	//appAddr is autodetected from the first data packet
+	err := appProxy(proxyAppAddr, ">>", fromDevice, toDevice)
 	if err != nil {
 		log.Fatalln("Fail on UPD Server start", err)
 	}
 
-	err = udpClientProxy(localAddr, remoteAddr, "<<", toClient, fromClient)
+	err = deviceProxy(proxyDeviceAddr, deviceAddr, "<<", toDevice, fromDevice)
 	if err != nil {
 		log.Fatalln("Fail on UPD Client start", err)
 	}

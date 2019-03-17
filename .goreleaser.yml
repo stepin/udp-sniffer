@@ -33,14 +33,13 @@ nfpm:
   files:
     "LICENSE.txt": "/usr/share/doc/udp-sniffer/LICENSE.txt"
     "README.md": "/usr/share/doc/udp-sniffer/README.md"
-    "README.ru.md": "/usr/share/doc/udp-sniffer/README.ru.md"
 dockers:
   - image_templates:
       - "stepin/udp-sniffer:{{ .Tag }}"
 checksum:
   name_template: 'checksums.txt'
 snapshot:
-  name_template: "{{ .Tag }}-next"
+  name_template: "{{ .Tag }}-v2"
 changelog:
   sort: asc
   filters:
