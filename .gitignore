@@ -32,7 +32,3 @@ udp-sniffer
 .DS_Store
 
 .idea
-
-dist
-udp-sniffer
-udp-sniffer.exe
