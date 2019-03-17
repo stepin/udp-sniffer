@@ -28,6 +28,9 @@ nfpm:
   formats:
     - deb
     - rpm
+  replacements:
+    386: i386
+    amd64: x86_64
   bindir: /usr/bin
   license: MIT
   files:
